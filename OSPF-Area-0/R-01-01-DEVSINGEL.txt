@@ -1,13 +1,12 @@
-R01-01-DEV-SINGEL#show run
 Building configuration...
 
-Current configuration : 1483 bytes
+Current configuration : 1826 bytes
 !
-! Last configuration change at 11:40:56 UTC Tue Nov 30 2021 by groep5
+! Last configuration change at 15:06:22 UTC Wed Dec 22 2021 by groep5
 !
 version 15.4
 service timestamps debug datetime msec
-service timestamps log datetime msec
+service timestamps log datetime msec localtime show-timezone
 no service password-encryption
 !
 hostname R01-01-DEV-SINGEL
@@ -69,11 +68,15 @@ interface Embedded-Service-Engine0/0
 !
 interface GigabitEthernet0/0
  ip address 200.0.0.2 255.255.255.252
+ ip ospf authentication message-digest
+ ip ospf message-digest-key 1 md5 Pa$$w0rd!
  duplex auto
  speed auto
 !
 interface GigabitEthernet0/1
  ip address 200.0.3.1 255.255.255.252
+ ip ospf authentication message-digest
+ ip ospf message-digest-key 1 md5 Pa$$w0rd!
  duplex auto
  speed auto
 !
@@ -84,6 +87,8 @@ interface Serial0/0/0
 !
 interface Serial0/0/1
  ip address 200.0.2.1 255.255.255.252
+ ip ospf authentication message-digest
+ ip ospf message-digest-key 1 md5 Pa$$w0rd!
  clock rate 2000000
 !
 router ospf 1
@@ -98,6 +103,9 @@ no ip http server
 no ip http secure-server
 !
 !
+logging trap warnings
+logging facility local3
+logging host 10.15.1.18
 !
 !
 !

@@ -1,13 +1,12 @@
-R02-01-EPE#show run
 Building configuration...
 
-Current configuration : 1779 bytes
+Current configuration : 3171 bytes
 !
-! Last configuration change at 08:08:31 UTC Thu Dec 2 2021 by groep5
+! Last configuration change at 14:55:19 UTC Wed Dec 22 2021 by groep5
 !
 version 15.4
 service timestamps debug datetime msec
-service timestamps log datetime msec
+service timestamps log datetime msec localtime show-timezone
 no service password-encryption
 !
 hostname R02-01-EPE
@@ -69,11 +68,15 @@ interface Embedded-Service-Engine0/0
 !
 interface GigabitEthernet0/0
  ip address 10.0.6.2 255.255.255.252
+ ip ospf authentication message-digest
+ ip ospf message-digest-key 1 md5 Pa$$w0rd!
  duplex auto
  speed auto
 !
 interface GigabitEthernet0/1
  no ip address
+ ip ospf authentication message-digest
+ ip ospf message-digest-key 1 md5 Pa$$w0rd!
  duplex auto
  speed auto
 !
@@ -81,11 +84,16 @@ interface GigabitEthernet0/1.1
  encapsulation dot1Q 1 native
  ip address 10.0.0.33 255.255.255.224
  ip helper-address 10.15.1.14
+ ip ospf authentication message-digest
+ ip ospf message-digest-key 1 md5 Pa$$w0rd!
 !
 interface GigabitEthernet0/1.4
  encapsulation dot1Q 4
- ip address 172.16.12.1 255.255.255.0
+ ip address 172.16.12.1 255.255.252.0
+ ip access-group vlan_4 in
  ip helper-address 10.15.1.14
+ ip ospf authentication message-digest
+ ip ospf message-digest-key 1 md5 Pa$$w0rd!
 !
 interface Serial0/0/0
  no ip address
@@ -94,11 +102,15 @@ interface Serial0/0/0
 !
 interface Serial0/0/1
  ip address 10.0.6.9 255.255.255.252
+ ip ospf authentication message-digest
+ ip ospf message-digest-key 1 md5 Pa$$w0rd!
 !
 router ospf 1
  router-id 0.5.0.0
  area 1 virtual-link 0.3.0.0
  area 3 virtual-link 0.6.0.0
+ passive-interface GigabitEthernet0/1
+ passive-interface GigabitEthernet0/1.1
  network 10.0.0.32 0.0.0.31 area 1
  network 10.0.6.0 0.0.0.3 area 1
  network 10.0.6.8 0.0.0.3 area 3
@@ -110,6 +122,26 @@ no ip http server
 no ip http secure-server
 !
 !
+ip access-list extended vlan_4
+ deny   ip 172.16.12.0 0.0.3.255 192.168.0.0 0.0.0.255
+ deny   ip 172.16.12.0 0.0.3.255 10.0.0.0 0.0.0.31
+ deny   ip 172.16.12.0 0.0.3.255 172.16.4.0 0.0.3.255
+ deny   ip 172.16.12.0 0.0.3.255 172.16.8.0 0.0.3.255
+ deny   ip 172.16.12.0 0.0.3.255 172.16.16.0 0.0.3.255
+ deny   ip 172.16.12.0 0.0.3.255 200.0.0.0 0.0.0.3
+ deny   ip 172.16.12.0 0.0.3.255 200.0.1.0 0.0.0.3
+ deny   ip 172.16.12.0 0.0.3.255 200.0.2.0 0.0.0.3
+ deny   ip 172.16.12.0 0.0.3.255 200.0.3.0 0.0.0.3
+ deny   ip 172.16.12.0 0.0.3.255 200.0.4.0 0.0.0.3
+ deny   ip 172.16.12.0 0.0.3.255 200.0.5.0 0.0.0.3
+ deny   ip 172.16.12.0 0.0.3.255 10.0.6.0 0.0.0.3
+ deny   ip 172.16.12.0 0.0.3.255 10.0.6.4 0.0.0.3
+ deny   ip 172.16.12.0 0.0.3.255 10.0.6.8 0.0.0.3
+ permit ip any any
+!
+logging trap warnings
+logging facility local3
+logging host 10.15.1.18
 !
 !
 !
