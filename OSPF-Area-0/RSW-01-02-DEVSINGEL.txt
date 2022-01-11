@@ -293,8 +293,10 @@ interface Vlan6
 router ospf 1
  router-id 0.4.0.0
  area 2 virtual-link 0.6.0.0
- passive-interface GigabitEthernet1/0/2
- passive-interface GigabitEthernet1/0/23
+ passive-interface default
+ no passive-interface GigabitEthernet1/0/1
+ no passive-interface GigabitEthernet1/0/14
+ no passive-interface GigabitEthernet1/0/24
  network 10.0.0.0 0.0.0.31 area 0
  network 10.0.6.4 0.0.0.3 area 2
  network 172.16.4.0 0.0.3.255 area 0
