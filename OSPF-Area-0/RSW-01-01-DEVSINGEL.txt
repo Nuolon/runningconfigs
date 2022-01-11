@@ -306,9 +306,10 @@ interface Vlan1502
 router ospf 1
  router-id 0.3.0.0
  area 1 virtual-link 0.5.0.0
- passive-interface GigabitEthernet1/0/2
- passive-interface GigabitEthernet1/0/3
- passive-interface GigabitEthernet1/0/23
+ passive-interface default
+ no passive-interface GigabitEthernet1/0/1
+ no passive-interface GigabitEthernet1/0/14
+ no passive-interface GigabitEthernet1/0/24
  network 10.0.0.0 0.0.0.31 area 0
  network 10.0.6.0 0.0.0.3 area 1
  network 10.15.1.0 0.0.0.255 area 0
