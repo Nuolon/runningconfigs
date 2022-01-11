@@ -93,6 +93,7 @@ interface Serial0/0/1
 !
 router ospf 1
  router-id 10.1.0.0
+ passive-interface Serial0/0/0
  network 200.0.0.0 0.0.0.3 area 0
  network 200.0.2.0 0.0.0.3 area 0
  network 200.0.3.0 0.0.0.3 area 0
